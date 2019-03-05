@@ -1,10 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import {Provider} from "react-redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
+import thunk from "redux-thunk";
+import { composeWithDevTools } from 'redux-devtools-extension';
+import "semantic-ui-css/semantic.min.css";
+import {BrowserRouter, Route} from "react-router-dom";
+import App from './App.jsx';
+import UserReducer from "./components/reducers/UserReducer";
 import * as serviceWorker from './serviceWorker';
+import { userLoggedIn } from './components/actions/auth.js';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const rootReducer = combineReducers({UserReducer});
+const store = createStore(rootReducer, composeWithDevTools( applyMiddleware(thunk)));
+
+if (localStorage.AuthJWT) {
+  const user = {token: localStorage.AuthJWT};
+  store.dispatch(userLoggedIn(user))
+}
+
+ReactDOM.render(
+  <Provider store = {store} >  
+<BrowserRouter>
+<Route component = {App} />
+</BrowserRouter>
+</Provider>
+, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
