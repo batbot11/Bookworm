@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from "react-redux";
+import decode from "jwt-decode";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -15,7 +16,11 @@ const rootReducer = combineReducers({UserReducer});
 const store = createStore(rootReducer, composeWithDevTools( applyMiddleware(thunk)));
 
 if (localStorage.AuthJWT) {
-  const user = {token: localStorage.AuthJWT};
+  const payload = decode(localStorage.AuthJWT);
+  const user = {token: localStorage.AuthJWT,
+  email: payload.email,
+  confirmed: payload.confirmed
+  };
   store.dispatch(userLoggedIn(user))
 }
 
