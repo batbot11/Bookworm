@@ -9,10 +9,11 @@ import "semantic-ui-css/semantic.min.css";
 import {BrowserRouter, Route} from "react-router-dom";
 import App from './App.jsx';
 import UserReducer from "./components/reducers/UserReducer";
+import BooksReducer from "./components/reducers/BooksReducer";
 import * as serviceWorker from './serviceWorker';
 import { userLoggedIn } from './components/actions/auth.js';
 
-const rootReducer = combineReducers({UserReducer});
+const rootReducer = combineReducers({UserReducer, BooksReducer});
 const store = createStore(rootReducer, composeWithDevTools( applyMiddleware(thunk)));
 
 if (localStorage.AuthJWT) {
