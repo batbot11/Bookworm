@@ -1,5 +1,7 @@
 import React from "react";
+import {connect} from "react-redux";
 import {Form, Dropdown} from "semantic-ui-react";
+import {getOptions} from "../actions/auth";
 
 class NewBookForm extends React.Component {
 
@@ -20,30 +22,30 @@ class NewBookForm extends React.Component {
         books: {}
     }
 
-    onSearchChange = (e, data) =>  {
+    onSearchChange = (e, data) => {
         clearTimeout(this.timer);
-        this.setState({query: data});
-      this.timer = setTimeout(this.fetchOptions, 1000)
-    }  
+        this.setState({query: data.searchQuery});
+        this.timer = setTimeout(this.fetchOptions, 1000)
+    }
 
     fetchOptions = () => {
         if (!this.state.query) return null;
         this.setState({loading: true})
+        this.props.getOptions(this.state.query)
     }
 
     render () {
         return (
             <Form>
-                <Dropdown
-                placeholder = "Search a book by title"
-                fluid search value = {this.state.query}
-                onSearchChange = {this.onSearchChange}
-                options = {this.state.options}
+                <Dropdown search fluid
+                placeholder = "Search book by Title"
                 loading = {this.state.loading}
+                options = {this.state.options}
+                onSearchChange = {this.onSearchChange}
                 />
             </Form>
         )
     }
 }
 
-export default NewBookForm;
+export default connect(null, {getOptions})(NewBookForm);

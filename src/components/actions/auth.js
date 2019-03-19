@@ -32,3 +32,5 @@ export const resetPasswordRequest = ({email}) => () => api.user.resetPasswordReq
 export const validateToken = (token) => () => api.user.validateToken(token);
 
 export const resetPassword = data => () => api.user.resetPassword(data);
+
+export const getOptions = query => () => api.user.getOptions(query);
